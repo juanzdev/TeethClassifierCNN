@@ -1,0 +1,12 @@
+
+Test
+
+* Part #1
+Using a NN, generate a model to detect whether or not someone showing their teeth. Use muct-a-jpg-v1.tar.gz for the initial data set.
+
+* Part #2
+Provide script that separates the muct-b-jpg-v1.tar.gz into a folder where people are showing their teeth, and people are not, based on the original data set.
+
+* Preferences
+Tensorflow, Caffe, Theano, etc...
+Docker
