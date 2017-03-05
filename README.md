@@ -18,7 +18,8 @@ python predict_feature_scaled.py
 
 this script will classify a single image or an entire folder if you set the BULK_PREDICTION to 1 or 0, be sure to specify the paths correctly
 
-
+##Teeth CNN Architecture
+![alt tag](https://github.com/juanzdev/TeethClassifierCNN/blob/master/architectureTeethCNN.png)
 
 ## PIPELINE EXPLAINED
 The following steps were necessary to be able to create the Teeth predictor:
