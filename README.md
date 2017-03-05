@@ -40,25 +40,25 @@ The following steps were necessary to be able to create the Teeth predictor:
 6. Manually cut 340 images from all_data folder an put them on the validation_data folder, the rest of the images of all_data folder will be copied to training_data (training_data 11453, validation_data 340)
 
 7. (python create_training_path_files.py) generate two textfiles containing the path for all images contained in training_data and validation_data
-	7.1 this files are the way to create our data set in a caffe compatible format lmdb
-	7.1 the format of the files are: path_of_file,label
-	7.1 training_data.txt
-	7.2 training_val_data.txt
+	7. this files are the way to create our data set in a caffe compatible format lmdb
+	7. the format of the files are: path_of_file,label
+	7. training_data.txt
+	7. training_val_data.txt
 	
 8. Generate lmdb files for training set and validation set, executing
-	8.0 remove any existing folder called train_lmdb or val_lmdb
-	8.0 go to Teeth folder
-	8.1 convert_imageset --gray --shuffle /devuser/Teeth/img/training_data/ training_data.txt train_lmdb
-	8.2 convert_imageset --gray --shuffle /devuser/Teeth/img/validation_data/ training_val_data.txt val_lmdb
+	8. remove any existing folder called train_lmdb or val_lmdb
+	8. go to Teeth folder
+	8. convert_imageset --gray --shuffle /devuser/Teeth/img/training_data/ training_data.txt train_lmdb
+	8. convert_imageset --gray --shuffle /devuser/Teeth/img/validation_data/ training_val_data.txt val_lmdb
 	
 9. Compute mean of training set, this will generate a file called mean.binaryproto
-	9.1 compute_image_mean -backend=lmdb train_lmdb mean.binaryproto
+	9. compute_image_mean -backend=lmdb train_lmdb mean.binaryproto
 	
 10. Train the Convolutional Neural Net
-	10.1 caffe train --solver=model/solver_feature_scaled.prototxt 2>&1 | tee logteeth_ult_fe_2.log
-	10.2 10000 iterations trained on CPU, 5 hours, test loss 0.12 accuracy 95%
+	10. caffe train --solver=model/solver_feature_scaled.prototxt 2>&1 | tee logteeth_ult_fe_2.log
+	10. 10000 iterations trained on CPU, 5 hours, test loss 0.12 accuracy 95%
 	
 11. To test the net on new data
-	11.1 python predict_feature_scaled.py with flag 1 on bulk to do the original assigment of copying all images on b folder to the RESULTS folder classified by showing theeth or not
+	11. python predict_feature_scaled.py with flag 1 on bulk to do the original assigment of copying all images on b folder to the RESULTS folder classified by showing theeth or not
 	
 
