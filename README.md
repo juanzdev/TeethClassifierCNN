@@ -11,7 +11,7 @@ If you don't want to run the net by configuring the environment you can see the 
 TESTING THE NET
 Testing the trained net requires a correctly configured Caffe Environment, please install Caffe and follow the guidelines here:
 http://caffe.berkeleyvision.org/installation.html
-Once you have correctly configured the environment you can test the trained Teeth net by loading the trained weights
+Once you have correctly configured the environment you can test the trained Teeth net by loading the trained weights stored on the model_snapshot folder
 
 using the following command:
 python predict_feature_scaled.py
