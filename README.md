@@ -20,7 +20,7 @@ this script will classify a single image or an entire folder if you set the BULK
 
 
 
-ENTIRE PIPELINE EXPLAINED
+## ENTIRE PIPELINE EXPLAINED
 The following steps were necessary to be able to create the Teeth predictor:
 
 1. Manual label stored on classified_data folder (752 manual labels) by using the jupyter notebook Teeth Detector.ipynb
