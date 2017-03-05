@@ -28,10 +28,10 @@ The following steps were necessary to be able to create the Teeth predictor:
 2. Mirrored data gets generated automatically with manual labels also on classified_data folder(total 1503) x2 times data (augmented)
 
 3. (python create_mouth_training_data.py) remove noise by extracting the mouth region only using CV2 libraries (acccurate most of the time)
-	mouth_detect_bulk from mouth_slicer.py
-	mouth images are scaled by 50x50
-	all data gets histogram_equalization and color to gray transforms
-	generates all data to mouth_data folder(total 1503 , some images can be incorectly classified a mouth region CV2 libraries(114))
+	3. mouth_detect_bulk from mouth_slicer.py
+	3. mouth images are scaled by 50x50
+	3. all data gets histogram_equalization and color to gray transforms
+	3. generates all data to mouth_data folder(total 1503 , some images can be incorectly classified a mouth region CV2 libraries(114))
 
 4. Manual cleaning of erronous data(check if they are mouths and no eyes, also check if the cuts are correct) (delete files manually(check manually 1503 files, less than 10 min check)) , some files got corrupted , delete those , at the end it ended with 1475 files (28 files were missclassified and were deleted manually)
 
