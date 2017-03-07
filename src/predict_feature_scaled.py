@@ -1,3 +1,4 @@
+from __future__ import division
 #Predict file, this will use the trained ConvNet to predict data from a set of files on a folder or for a individual file 
 import numpy as np
 import sys
@@ -14,14 +15,14 @@ from util import histogram_equalization
 
 #CONFIGURATION VARIABLES
 
-BULK_PREDICTION = 0 #Set this to 0 to classify individual files
+BULK_PREDICTION = 1 #Set this to 0 to classify individual files
 
 #if bulk prediction is set to 1 the net will predict all images on the configured path
-test_set_folder_path = "../img/original_data/b"
+test_set_folder_path = "../img/original_data/b_labeled"
 #all the files will be moved to a showing teeth or not showing teeth folder on the test_output_result_folder_path path
 test_output_result_folder_path = "../result" 
 #if BULK_PREDICTION = 0 the net will classify only the file specified on individual_test_image
-individual_test_image = "../img/b.jpg"
+individual_test_image = "../img/classified_data/242bdfa6-abe4-4e2d-bbd4-cc8110a0611f_showingteeth.jpg"
 
 
 #-------------------
@@ -46,7 +47,7 @@ mean_array = np.asarray(mean_blob.data, dtype=np.float32).reshape(
 
 mean_array = mean_array*0.003921568627
 
-net = caffe.Net('../model/deploy.prototxt',1,weights='../model_snapshot/snap_fe_iter_10000.caffemodel')
+net = caffe.Net('../model/deploy.prototxt',1,weights='../model_snapshot/snap_fe_iter_1400.caffemodel')
 net.blobs['data'].reshape(1,1, 50, 50)  # image size is 227x227
 transformer = caffe.io.Transformer({'data': net.blobs['data'].data.shape})
 transformer.set_mean('data', mean_array)
@@ -70,7 +71,27 @@ if BULK_PREDICTION==0:
 		print("Prediction probabilities")
 		print(out['pred'])
 else:
+	#clear result folder
+	files = glob.glob(test_output_result_folder_path+'/not_showing_teeth/*')
+	for f in files:
+		os.remove(f)
+
+	files = glob.glob(test_output_result_folder_path+'/showing_teeth/*')
+	for f in files:
+		os.remove(f)
+	
+	#performance variables
+	total_samples = 0
+	total_positives_training = 0
+	total_negatives_training = 0
+	true_positive = 0
+	true_negative = 0
+	false_positive = 0
+	false_negative = 0
+	
+
 	for in_idx, img_path in enumerate(original_data_set):
+		total_samples = total_samples + 1
 		head, tail = os.path.split(img_path)
 		img = cv2.imread(img_path, cv2.IMREAD_UNCHANGED)
 		img = transform_img(img, img_width=IMAGE_WIDTH, img_height=IMAGE_HEIGHT)
@@ -87,16 +108,41 @@ else:
 			print("Prediction probabilities")
 			print(out['pred'])
 			if(pred==1):
+				if 'showingteeth' in tail:
+					total_positives_training = total_positives_training + 1
+					true_positive = true_positive + 1
+				else:
+					total_negatives_training = total_negatives_training + 1
+					false_positive = false_positive + 1
+
 				path = test_output_result_folder_path+"/showing_teeth/"+tail
 				shutil.copy2(img_path, path)
 			else:
+				if 'showingteeth' in tail:
+					total_positives_training = total_positives_training + 1
+					false_negative = false_negative + 1
+				else:
+					total_negatives_training = total_negatives_training + 1
+					true_negative = true_negative + 1
+
 				path = test_output_result_folder_path+"/not_showing_teeth/"+tail
 				shutil.copy2(img_path, path)
-			
 
+	print "Total samples %d" %total_samples
+ 	print "True positives %d" %true_positive
+ 	print "False positives %d" %false_positive
+	print "True negative %d" %true_negative
+	print "False negative %d" %false_negative
+	
+	accuracy = (true_negative + true_positive)/total_samples
 
+	recall = true_positive / (true_positive + false_negative)
+	precision = true_positive / (true_positive + false_positive)
+	f1score = 2*((precision*recall)/(precision+recall))
 
-
-
+	print "Accuracy  %.2f" %accuracy
+	print "Recall  %.2f" %recall
+	print "Precision  %.2f" %precision
+	print "F1Score  %.2f" %f1score
 
 
