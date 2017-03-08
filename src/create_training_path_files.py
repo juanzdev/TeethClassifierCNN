@@ -8,8 +8,6 @@ from caffe.proto import caffe_pb2
 import numpy as np
 import os
 
-IMAGE_WIDTH = 50
-IMAGE_HEIGHT = 50
 
 train_lmdb = "../train_lmdb"
 train_data = [img for img in glob.glob("../img/training_data/*jpg")]

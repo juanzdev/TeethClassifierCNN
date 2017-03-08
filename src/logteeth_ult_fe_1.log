@@ -1,0 +1,12 @@
+F0307 15:54:29.321300 2997859264 io.cpp:36] Check failed: fd != -1 (-1 vs. -1) File not found: model/solver_feature_scaled.prototxt
+*** Check failure stack trace: ***
+    @        0x106b20ea8  google::LogMessage::Fail()
+    @        0x106b2031c  google::LogMessage::SendToLog()
+    @        0x106b2087a  google::LogMessage::Flush()
+    @        0x106b23c2f  google::LogMessageFatal::~LogMessageFatal()
+    @        0x106b2118f  google::LogMessageFatal::~LogMessageFatal()
+    @        0x1068ba2ee  caffe::ReadProtoFromTextFile()
+    @        0x1068cc6d3  caffe::ReadSolverParamsFromTextFileOrDie()
+    @        0x1067ab381  train()
+    @        0x1067ae3fa  main
+    @     0x7fffa9cae255  start

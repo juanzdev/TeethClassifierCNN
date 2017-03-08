@@ -7,8 +7,8 @@ import os
 from shutil import copyfile
 
 dataset_to_label = [img for img in glob.glob("../img/original_data/b/*jpg")]
-output_folder = "../img/original_data/b_labeled/"
-
+output_folder = "../img/original_data/b_labeled2/"
+first_image = "../img/original_data/b/i000rb-fn.jpg"
 current_index = 0
 
 def callbackNO(self,event=None):

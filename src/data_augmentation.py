@@ -9,6 +9,8 @@ import uuid
 import os
 from shutil import copyfile
 
+IMAGE_WIDTH = 100
+IMAGE_HEIGHT = 100
 
 input_folder = "../img/mouth_data"
 input_data_set = [img for img in glob.glob(input_folder+"/*jpg")]
@@ -30,7 +32,7 @@ for in_idx, img_path in enumerate(input_data_set):
         #print(total_rotation)
         mouth_rotated = image_rotated_cropped(img_path,total_rotation)
         #resize to 50 by 50
-        mouth_rotated = cv2.resize(mouth_rotated, (50, 50), interpolation = cv2.INTER_CUBIC)
+        mouth_rotated = cv2.resize(mouth_rotated, (IMAGE_WIDTH, IMAGE_HEIGHT), interpolation = cv2.INTER_CUBIC)
         if generate_random_filename == 1:
             guid = uuid.uuid4()
             uid_str = guid.urn

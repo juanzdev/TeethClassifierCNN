@@ -7,7 +7,7 @@ import os
 from shutil import copyfile
 
 dataset_to_label = [img for img in glob.glob("../img/original_data/b_labeled/*jpg")]
-output_folder = "../img/original_data/b_labeled2/"
+output_folder = "../img/original_data/b_labeled2"
 
 for in_idx, img_path in enumerate(dataset_to_label):
 	head, tail = os.path.split(img_path)

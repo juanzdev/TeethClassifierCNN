@@ -22,7 +22,7 @@ test_set_folder_path = "../img/original_data/b_labeled"
 #all the files will be moved to a showing teeth or not showing teeth folder on the test_output_result_folder_path path
 test_output_result_folder_path = "../result" 
 #if BULK_PREDICTION = 0 the net will classify only the file specified on individual_test_image
-individual_test_image = "../img/classified_data/242bdfa6-abe4-4e2d-bbd4-cc8110a0611f_showingteeth.jpg"
+individual_test_image = "../test1.jpg"
 
 
 #-------------------
@@ -31,9 +31,11 @@ individual_test_image = "../img/classified_data/242bdfa6-abe4-4e2d-bbd4-cc8110a0
 
 #read all test images
 original_data_set = [img for img in glob.glob(test_set_folder_path+"/*jpg")]
-IMAGE_WIDTH = 227
-IMAGE_HEIGHT = 227
+IMAGE_WIDTH_MAIN = 480
+IMAGE_HEIGHT_MAIN = 640
 
+IMAGE_WIDTH = 100
+IMAGE_HEIGHT = 100
 
 
 #CNN Definition
@@ -47,8 +49,8 @@ mean_array = np.asarray(mean_blob.data, dtype=np.float32).reshape(
 
 mean_array = mean_array*0.003921568627
 
-net = caffe.Net('../model/deploy.prototxt',1,weights='../model_snapshot/snap_fe_iter_1400.caffemodel')
-net.blobs['data'].reshape(1,1, 50, 50)  # image size is 227x227
+net = caffe.Net('../model/deploy.prototxt',1,weights='../model_snapshot/snap_fe_iter_2700.caffemodel')
+net.blobs['data'].reshape(1,1, IMAGE_WIDTH, IMAGE_HEIGHT)  # image size is 227x227
 transformer = caffe.io.Transformer({'data': net.blobs['data'].data.shape})
 transformer.set_mean('data', mean_array)
 transformer.set_transpose('data', (2,0,1))
@@ -66,6 +68,7 @@ if BULK_PREDICTION==0:
 		net.blobs['data'].data[...] = mouth
 		out = net.forward()
 		pred = out['pred'].argmax()
+		print(individual_test_image)
 		print("Prediction:")
 		print(pred)
 		print("Prediction probabilities")
@@ -94,7 +97,7 @@ else:
 		total_samples = total_samples + 1
 		head, tail = os.path.split(img_path)
 		img = cv2.imread(img_path, cv2.IMREAD_UNCHANGED)
-		img = transform_img(img, img_width=IMAGE_WIDTH, img_height=IMAGE_HEIGHT)
+		img = transform_img(img, img_width=IMAGE_WIDTH_MAIN, img_height=IMAGE_HEIGHT_MAIN)
 		img = histogram_equalization(img)
 		mouth_pre = mouth_detect_single(img_path)
 		if mouth_pre is not None:
