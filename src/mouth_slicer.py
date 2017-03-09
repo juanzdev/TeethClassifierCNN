@@ -1,4 +1,3 @@
-#Manual feature detector to slice mouth from the classified folders , this will be our true training data
 import cv2
 import numpy as np
 import glob

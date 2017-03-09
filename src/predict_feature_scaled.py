@@ -28,7 +28,6 @@ individual_test_image = "../test1.jpg"
 #-------------------
 
 
-
 #read all test images
 original_data_set = [img for img in glob.glob(test_set_folder_path+"/*jpg")]
 IMAGE_WIDTH_MAIN = 480
@@ -138,7 +137,6 @@ else:
 	print "False negative %d" %false_negative
 	
 	accuracy = (true_negative + true_positive)/total_samples
-
 	recall = true_positive / (true_positive + false_negative)
 	precision = true_positive / (true_positive + false_positive)
 	f1score = 2*((precision*recall)/(precision+recall))

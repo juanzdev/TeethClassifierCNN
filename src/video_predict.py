@@ -1,4 +1,3 @@
-#Predict file, this will use the trained ConvNet to predict data from a set of files on a folder or for a individual file 
 import numpy as np
 import sys
 import caffe
@@ -11,8 +10,6 @@ from caffe.proto import caffe_pb2
 import os
 import shutil
 from util import histogram_equalization
-IMAGE_WIDTH_MAIN = 480
-IMAGE_HEIGHT_MAIN = 640
 
 IMAGE_WIDTH = 100
 IMAGE_HEIGHT = 100
@@ -72,8 +69,13 @@ while rval:
     cv2.imshow("preview", frame)
     rval, frame = vc.read()
     result = predict(frame)
-    if result == 1:
-    	cv2.putText(frame, "Showing teeth",(50, 50),cv2.FONT_HERSHEY_COMPLEX_SMALL,.7,(0,0,255))
+    if(result == 1):
+    	size = cv2.getTextSize("Showing teeth", cv2.FONT_HERSHEY_PLAIN, 2, 1)[0]
+    	x,y = (50,250)
+    	label_top_left = (x - size[0]/2, y - size[1]/2)
+    	print(frame)
+    	cv2.rectangle(frame, (x,y),(x+size[0],y-size[1]),(0,255,0),-2);
+    	cv2.putText(frame, "Showing teeth",(x,y),cv2.FONT_HERSHEY_PLAIN,2,(0,0,0))
     #print result
     key = cv2.waitKey(20)
     if key == 27: # exit on ESC
