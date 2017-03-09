@@ -8,6 +8,20 @@ This package includes the entire code for the teeth classification Convolutional
 QUICK TEST
 If you don't want to run the net by configuring the environment you can see the Results folder included in this package, this is the final output of the assigned task, inside the results folder you can find two folders: showing teeth and not showing teeth, inside both of them are the images from muct-b-jpg-v1 copied to the respective folder according to the model prediction.
 
+PERFORMANCE
+The net is able to classify most of the examples correctly but also is making some mistakes, most of the time this is related to the mouth detector API approach and relatively small size of training data, even with this problems I consider the model pretty accurate most of the time, here are the metrics on the test set.
+
+Total samples 751
+True positives 346
+False positives 26
+True negative 259
+False negative 80
+Accuracy  0.81
+Recall  0.81
+Precision  0.93
+F1Score  0.87
+
+
 TESTING THE NET
 Testing the trained net requires a correctly configured Caffe Environment, please install Caffe and follow the guidelines here:
 http://caffe.berkeleyvision.org/installation.html
