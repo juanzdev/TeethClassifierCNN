@@ -21,7 +21,7 @@ Total samples 751
 * Accuracy  0.81
 * Recall  0.81
 * Precision  0.93
-* F1Score  0.87
+* F1 score  0.87
 
 
 TESTING THE NET
