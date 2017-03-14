@@ -1,4 +1,4 @@
-#Generates two txt files that will hold the pathname and the label, this is required to create the LMDB file type
+#Generates two txt files that will hold the pathname and the label of the mouth image, this is required to create the LMDB file type
 import caffe
 import lmdb
 import glob
@@ -9,7 +9,6 @@ import numpy as np
 import os
 
 
-train_lmdb = "../train_lmdb"
 train_data = [img for img in glob.glob("../img/training_data/*jpg")]
 val_data = [img for img in glob.glob("../img/validation_data/*jpg")]
 

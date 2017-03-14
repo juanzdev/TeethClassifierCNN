@@ -9,12 +9,12 @@ import uuid
 import os
 from shutil import copyfile
 
-IMAGE_WIDTH = 100
-IMAGE_HEIGHT = 100
+IMAGE_WIDTH = 32
+IMAGE_HEIGHT = 32
 
 input_folder = "../img/mouth_data"
-input_data_set = [img for img in glob.glob(input_folder+"/*jpg")]
 output_folder ="../img/all_data"
+input_data_set = [img for img in glob.glob(input_folder+"/*jpg")]
 generate_random_filename = 1
 
 for in_idx, img_path in enumerate(input_data_set):

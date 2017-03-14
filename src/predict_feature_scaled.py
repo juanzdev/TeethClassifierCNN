@@ -1,5 +1,5 @@
 from __future__ import division
-#Predict file, this will use the trained ConvNet to predict data from a set of files on a folder or for a individual file 
+#Prediction file, this will use the trained ConvNet to predict data from a set of files on a folder or for a individual file 
 import numpy as np
 import sys
 import caffe
@@ -7,13 +7,12 @@ import glob
 import uuid
 import cv2
 from util import transform_img
-from mouth_slicer import mouth_detect_single
+from mouth_detector_dlib import mouth_detector
 from caffe.proto import caffe_pb2
 import os
 import shutil
 from util import histogram_equalization
 
-#CONFIGURATION VARIABLES
 
 BULK_PREDICTION = 1 #Set this to 0 to classify individual files
 
@@ -22,10 +21,8 @@ test_set_folder_path = "../img/original_data/b_labeled"
 #all the files will be moved to a showing teeth or not showing teeth folder on the test_output_result_folder_path path
 test_output_result_folder_path = "../result" 
 #if BULK_PREDICTION = 0 the net will classify only the file specified on individual_test_image
-individual_test_image = "../test1.jpg"
+individual_test_image = "../girl.jpg"
 
-
-#-------------------
 
 
 #read all test images
@@ -33,9 +30,9 @@ original_data_set = [img for img in glob.glob(test_set_folder_path+"/*jpg")]
 IMAGE_WIDTH_MAIN = 480
 IMAGE_HEIGHT_MAIN = 640
 
-IMAGE_WIDTH = 100
-IMAGE_HEIGHT = 100
-
+IMAGE_WIDTH = 32
+IMAGE_HEIGHT = 32
+mouth_detector_instance = mouth_detector()
 
 #CNN Definition
 #extract mean data
@@ -48,8 +45,8 @@ mean_array = np.asarray(mean_blob.data, dtype=np.float32).reshape(
 
 mean_array = mean_array*0.003921568627
 
-net = caffe.Net('../model/deploy.prototxt',1,weights='../model_snapshot/snap_fe_iter_2700.caffemodel')
-net.blobs['data'].reshape(1,1, IMAGE_WIDTH, IMAGE_HEIGHT)  # image size is 227x227
+net = caffe.Net('../model/deploy.prototxt',1,weights='../model_snapshot/snap_fe_iter_8700.caffemodel')
+net.blobs['data'].reshape(1,1, IMAGE_WIDTH, IMAGE_HEIGHT)
 transformer = caffe.io.Transformer({'data': net.blobs['data'].data.shape})
 transformer.set_mean('data', mean_array)
 transformer.set_transpose('data', (2,0,1))
@@ -58,9 +55,7 @@ transformer.set_raw_scale('data', 0.00392156862745)
 
 if BULK_PREDICTION==0:
 	img = cv2.imread(individual_test_image, cv2.IMREAD_UNCHANGED)
-	#img = transform_img(img, img_width=IMAGE_WIDTH, img_height=IMAGE_HEIGHT)
-	#img = histogram_equalization(img)
-	mouth_pre = mouth_detect_single(individual_test_image) #mouth is grayscale 1..255 50x50 BGR
+	mouth_pre = mouth_detector_instance.mouth_detect_single(individual_test_image,True)
 	if mouth_pre is not None:
 		mouth_pre = mouth_pre[:,:,np.newaxis]
 		mouth = transformer.preprocess('data', mouth_pre)
@@ -73,7 +68,6 @@ if BULK_PREDICTION==0:
 		print("Prediction probabilities")
 		print(out['pred'])
 else:
-	#clear result folder
 	files = glob.glob(test_output_result_folder_path+'/not_showing_teeth/*')
 	for f in files:
 		os.remove(f)
@@ -91,14 +85,12 @@ else:
 	false_positive = 0
 	false_negative = 0
 	
-
 	for in_idx, img_path in enumerate(original_data_set):
 		total_samples = total_samples + 1
 		head, tail = os.path.split(img_path)
 		img = cv2.imread(img_path, cv2.IMREAD_UNCHANGED)
 		img = transform_img(img, img_width=IMAGE_WIDTH_MAIN, img_height=IMAGE_HEIGHT_MAIN)
-		img = histogram_equalization(img)
-		mouth_pre = mouth_detect_single(img_path)
+		mouth_pre = mouth_detector_instance.mouth_detect_single(img_path,True)
 		if mouth_pre is not None:
 			mouth_pre = mouth_pre[:,:,np.newaxis]
 			mouth = transformer.preprocess('data', mouth_pre)
