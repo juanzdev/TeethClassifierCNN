@@ -63,7 +63,7 @@ class mouth_detector():
                 face_hog_mouth = symfront[165:220, 130:190]
                 gray_img = cv2.cvtColor(face_hog_mouth, cv2.COLOR_BGR2GRAY) 
                 crop_img_resized = cv2.resize(gray_img, (IMAGE_WIDTH, IMAGE_HEIGHT), interpolation = cv2.INTER_CUBIC)
-                cv2.imwrite("../img/output_test_img/mouthdetectsingle_crop_rezized.jpg",gray_img)
+                #cv2.imwrite("../img/output_test_img/mouthdetectsingle_crop_rezized.jpg",gray_img)
                 return crop_img_resized,rectan.left(),rectan.top(),rectan.right(),rectan.bottom()
         else:
             return None,-1,-1,-1,-1

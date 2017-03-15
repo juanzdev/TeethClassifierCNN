@@ -5,7 +5,7 @@ import glob
 import uuid
 import cv2
 from util import transform_img
-from mouth_detector_dlib import mouth_detector
+from mouth_detector_opencv import mouth_detector
 from caffe.proto import caffe_pb2
 import os
 import shutil
@@ -23,12 +23,12 @@ def predict(image,mouth_detector):
 		mouth = transformer.preprocess('data', mouth_pre)
 		net.blobs['data'].data[...] = mouth
 		out = net.forward()
-		pred = out['pred'].argmax()
-		print("Prediction:")
-		print(pred)
+		#pred = out['pred'].argmax()
+		#print("Prediction:")
+		#print(pred)
 		print("Prediction probabilities")
 		print(out['pred'])
-		if(pred == 1 and out['pred'][0][1]>0.7):
+		if(out['pred'][0][1]>0.75):
 			return 1,x,y,w,h
 		else:
 			return 0,x,y,w,h
@@ -71,17 +71,18 @@ label_top_left = (x - size[0]/2, y - size[1]/2)
 mouth_detector_instance = mouth_detector()
 
 while rval:
-    cv2.imshow("preview", frame)
-    rval, frame = vc.read()
-    result,xf,yf,wf,hf = predict(frame,mouth_detector_instance)
-    print xf
-    cv2.rectangle(frame, (xf,yf),(wf,hf),(0,255,0),1);
-    if result is not None:
+	cv2.imshow("preview", frame)
+	rval, frame = vc.read()
+	copy_frame = frame.copy()
+	result,xf,yf,wf,hf = predict(copy_frame,mouth_detector_instance)
+	
+	#key = cv2.waitKey(20)
+	cv2.rectangle(frame, (xf,yf),(wf,hf),(0,255,0),1)
+	if result is not None:
 	    if(result == 1):
-	    	cv2.rectangle(frame, (x,y),(x+size[0],y-size[1]),(0,255,0),-2);
+	    	cv2.rectangle(frame, (x,y),(x+size[0],y-size[1]),(0,255,0),-2)
 	    	cv2.putText(frame, "Showing teeth",(x,y),cv2.FONT_HERSHEY_PLAIN,2,(0,0,0))
-    #print result
-    key = cv2.waitKey(20)
-    if key == 27: # exit on ESC
-        break
+	    	print "SHOWING TEETH!!!"
+
+	cv2.waitKey(30)
 cv2.destroyWindow("preview")

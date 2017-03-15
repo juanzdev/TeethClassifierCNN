@@ -33,21 +33,22 @@ class mouth_detector():
             img = image
     
         img = histogram_equalization(img)
-        gray_img1 = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) 
-        facedets = self.face_det(gray_img1,1)
-        print facedets
+        #gray_img1 = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) 
+        facedets = self.face_det(img,1)
+        #print facedets
         if len(facedets) > 0:
-            shape = self.md_face(img,facedets[0])
-            print shape
+            facedet_obj= facedets[0]
+            shape = self.md_face(img,facedet_obj)
+            #print shape
             p2d = np.asarray([(shape.part(n).x, shape.part(n).y,) for n in range(shape.num_parts)], np.float32)
-            rawfront, symfront = self.fronter.frontalization(img,facedets[0],p2d)
+            rawfront, symfront = self.fronter.frontalization(img,facedet_obj,p2d)
             face_hog_mouth = symfront[165:220, 130:190] #get half-bottom part
             if(face_hog_mouth is not None):
                 gray_img = cv2.cvtColor(face_hog_mouth, cv2.COLOR_BGR2GRAY) 
                 #negative_mouth_region = self.negative_image(gray_img)
                 crop_img_resized = cv2.resize(gray_img, (IMAGE_WIDTH, IMAGE_HEIGHT), interpolation = cv2.INTER_CUBIC)
-                cv2.imwrite("../img/output_test_img/mouthdetectsingle_crop_rezized.jpg",crop_img_resized)
-                return crop_img_resized,facedets[0].left(),facedets[0].top(),facedets[0].right(),facedets[0].bottom()
+                #cv2.imwrite("../img/output_test_img/mouthdetectsingle_crop_rezized.jpg",crop_img_resized)
+                return crop_img_resized,facedet_obj.left(),facedet_obj.top(),facedet_obj.right(),facedet_obj.bottom()
             else:
                 return None,-1,-1,-1,-1
         else:
