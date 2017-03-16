@@ -71,16 +71,19 @@ fourcc = cv2.cv.CV_FOURCC(*'mp4v')
 #fourcc = cv2.VideoWriter_fourcc(*'mp4v')
 
 
-cap = cv2.VideoCapture('../farewell-speech.mp4')
+cap = cv2.VideoCapture('../obama-speech.mp4')
+cap.set(1,10000); # Where frame_no is the frame you want
+ret, frame = cap.read() # Read the frame
+#cv2.imshow('window_name', frame) # show frame on window
 w = cap.get(cv2.cv.CV_CAP_PROP_FRAME_WIDTH);
 h = cap.get(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT);
-out = cv2.VideoWriter('output.avi',fourcc, 24.0, (int(w),int(h)))
+out = cv2.VideoWriter('output.avi',fourcc, 24, (int(w),int(h)))
 #cap.set(3,500)
 #cap.set(4,500)
 #cap.set(5,30)
 
 #cap = cv2.VideoCapture('../blackwhite.mp4')
-cap.set(1,1);
+
 ret, frame = cap.read()
 while(cap.isOpened()):
 	ret, frame = cap.read()
@@ -93,28 +96,28 @@ while(cap.isOpened()):
 	
 	if result is not None:
 	    if(result == 1):
-	    	cv2.rectangle(frame, (xf,yf),(wf,hf),(0,255,0),1)
-	    	prob_round = prob[0][1]
+	    	cv2.rectangle(frame, (xf,yf),(wf,hf),(0,255,0),4,0)
+	    	prob_round = prob[0][1]*100
 	    	print prob_round
-	    	cv2.rectangle(frame, (wf,hf-int(((hf-yf)/1.3))),(wf+70,yf+int(((hf-yf)/1.3))),(0,255,0),-2)
-	    	cv2.putText(frame, "Teeth!",(wf,hf-int(((hf-yf)/2))),cv2.FONT_HERSHEY_PLAIN,0.9,(0,0,0))
-	    	cv2.putText(frame, str(prob_round),(wf,hf-int(((hf-yf)/2))+10),cv2.FONT_HERSHEY_PLAIN,0.9,(0,0,0))
+	    	cv2.rectangle(frame, (xf-2,yf-25),(wf+2,yf),(0,255,0),-1,0)
+	    	cv2.rectangle(frame, (xf-2,hf),(xf+((wf-xf)/2),hf+25),(0,255,0),-1,0)
+	    	cv2.putText(frame, "Teeth!!",(xf,hf+14),cv2.FONT_HERSHEY_PLAIN,1.2,0,2)
+	    	cv2.putText(frame, str(prob_round)+"%",(xf,yf-10),cv2.FONT_HERSHEY_PLAIN,1.2,0,2)
 	    	#out.write(frame)
 	    	print "SHOWING TEETH!!!"
 	    elif(result==0):
-	    	cv2.rectangle(frame, (xf,yf),(wf,hf),(128,128,128),1)
-	    	prob_round = prob[0][1]
+	    	cv2.rectangle(frame, (xf,yf),(wf,hf),(64,64,64),4,0)
+	    	prob_round = prob[0][1]*100
 	    	print prob_round
-	    	cv2.rectangle(frame, (wf,hf-int(((hf-yf)/1.3))),(wf+70,yf+int(((hf-yf)/1.3))),(128,128,128),-2)
-	    	cv2.putText(frame, "Teeth?",(wf,hf-int(((hf-yf)/2))),cv2.FONT_HERSHEY_PLAIN,0.9,(0,0,0))
-	    	cv2.putText(frame, str(prob_round),(wf,hf-int(((hf-yf)/2))+10),cv2.FONT_HERSHEY_PLAIN,0.9,(0,0,0))
-	    	
-	    	print "SHOWING TEETH!!!"
+	    	cv2.rectangle(frame, (xf-2,yf-25),(wf+2,yf),(64,64,64),-1,0)
+	    	cv2.rectangle(frame, (xf-2,hf),(xf+((wf-xf)/2),hf+25),(64,64,64),-1,0)
+	    	cv2.putText(frame, "Teeth??",(xf,hf+14),cv2.FONT_HERSHEY_PLAIN,1.2,0,2)
+	    	cv2.putText(frame, str(prob_round)+"%",(xf,yf-10),cv2.FONT_HERSHEY_PLAIN,1.2,0,2)
 	
 	out.write(frame)
 	cv2.imshow('frame',frame)
 	
-	if cv2.waitKey(80) & 0xFF == ord('q'):
+	if cv2.waitKey(200) & 0xFF == ord('q'):
 		break
 
 cap.release()

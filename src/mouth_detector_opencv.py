@@ -41,19 +41,10 @@ class mouth_detector():
             roi_gray = gray_img1[y:y+h, x:x+w]
             eyes = self.eye_cascade.detectMultiScale(roi_gray)
             if(len(eyes)>0):
-                #valid face
-                #height_region = (h + y)-y
-                #width_region = (w + x) - x 
-                #p = x + (width_region/4)
-                #q = y + (height_region/2)
-                #r = w - (width_region/2)
-                #s = h - (height_region/2)
-
                 p = x 
                 q = y
                 r = w
                 s = h
-
                 face_region = gray_img1[q:q+s, p:p+r]
                 face_region_rect = dlib.rectangle(long(q),long(p),long(q+s),long(p+r))
                 rectan = dlib.rectangle(long(x),long(y),long(x+w),long(y+h))

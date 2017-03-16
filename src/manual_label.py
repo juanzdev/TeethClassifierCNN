@@ -22,7 +22,7 @@ def callbackNO(self,event=None):
     extension = tail.split(".")[1]
     new_name = name + "_not."
     output_path = output_folder+"/"+new_name+extension
-    copyfile(path, output_path)
+    #copyfile(path, output_path)
 
     #change to next picture
     current_index = current_index + 1
@@ -41,7 +41,7 @@ def callbackYES(self,event=None):
     extension = tail.split(".")[1]
     new_name = name + "_showingteeth."
     output_path = output_folder+"/"+new_name+extension
-    copyfile(path, output_path)
+    #copyfile(path, output_path)
 
     #change to next picture
     current_index = current_index + 1

@@ -5,11 +5,12 @@ import glob
 import uuid
 import cv2
 from util import transform_img
-from mouth_detector_opencv import mouth_detector
+from mouth_detector_dlib import mouth_detector
 from caffe.proto import caffe_pb2
 import os
 import shutil
 from util import histogram_equalization
+import math
 
 IMAGE_WIDTH = 32
 IMAGE_HEIGHT = 32
@@ -28,12 +29,12 @@ def predict(image,mouth_detector):
 		#print(pred)
 		print("Prediction probabilities")
 		print(out['pred'])
-		if(out['pred'][0][1]>0.75):
-			return 1,x,y,w,h
+		if(out['pred'][0][1]>0.70):
+			return 1,out['pred'],x,y,w,h
 		else:
-			return 0,x,y,w,h
+			return 0,out['pred'],x,y,w,h
 	else:
-		return 0,0,0,0,0
+		return -1,0,0,0,0,0
 
 #CNN Definition
 #extract mean data
@@ -71,18 +72,31 @@ label_top_left = (x - size[0]/2, y - size[1]/2)
 mouth_detector_instance = mouth_detector()
 
 while rval:
-	cv2.imshow("preview", frame)
+	
 	rval, frame = vc.read()
 	copy_frame = frame.copy()
-	result,xf,yf,wf,hf = predict(copy_frame,mouth_detector_instance)
-	
-	#key = cv2.waitKey(20)
-	cv2.rectangle(frame, (xf,yf),(wf,hf),(0,255,0),1)
+	result,prob,xf,yf,wf,hf = predict(copy_frame,mouth_detector_instance)
+	print prob
 	if result is not None:
 	    if(result == 1):
-	    	cv2.rectangle(frame, (x,y),(x+size[0],y-size[1]),(0,255,0),-2)
-	    	cv2.putText(frame, "Showing teeth",(x,y),cv2.FONT_HERSHEY_PLAIN,2,(0,0,0))
+	    	cv2.rectangle(frame, (xf,yf),(wf,hf),(0,255,0),4,0)
+	    	prob_round = prob[0][1]*100
+	    	print prob_round
+	    	cv2.rectangle(frame, (xf-2,yf-25),(wf+2,yf),(0,255,0),-1,0)
+	    	cv2.rectangle(frame, (xf-2,hf),(xf+((wf-xf)/2),hf+25),(0,255,0),-1,0)
+	    	cv2.putText(frame, "Teeth!!",(xf,hf+14),cv2.FONT_HERSHEY_PLAIN,1.2,0,2)
+	    	cv2.putText(frame, str(prob_round)+"%",(xf,yf-10),cv2.FONT_HERSHEY_PLAIN,1.2,0,2)
+	    	#out.write(frame)
 	    	print "SHOWING TEETH!!!"
+	    elif(result==0):
+	    	cv2.rectangle(frame, (xf,yf),(wf,hf),(64,64,64),4,0)
+	    	prob_round = prob[0][1]*100
+	    	print prob_round
+	    	cv2.rectangle(frame, (xf-2,yf-25),(wf+2,yf),(64,64,64),-1,0)
+	    	cv2.rectangle(frame, (xf-2,hf),(xf+((wf-xf)/2),hf+25),(64,64,64),-1,0)
+	    	cv2.putText(frame, "Teeth??",(xf,hf+14),cv2.FONT_HERSHEY_PLAIN,1.2,0,2)
+	    	cv2.putText(frame, str(prob_round)+"%",(xf,yf-10),cv2.FONT_HERSHEY_PLAIN,1.2,0,2)
 
-	cv2.waitKey(30)
+	cv2.imshow("preview", frame)
+	cv2.waitKey(1)
 cv2.destroyWindow("preview")
