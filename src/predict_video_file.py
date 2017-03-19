@@ -22,13 +22,13 @@ x,y = (50,250)
 # Define the codec and create VideoWriter object
 fourcc = cv2.cv.CV_FOURCC(*'mp4v')
 
-cap = cv2.VideoCapture('../obama-speech.mp4')
-cap.set(1,10000);
+cap = cv2.VideoCapture('../elon.mp4')
+cap.set(1,19300);
 ret, frame = cap.read()
 #cv2.imshow('window_name', frame) # show frame on window
 w = cap.get(cv2.cv.CV_CAP_PROP_FRAME_WIDTH);
 h = cap.get(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT);
-out = cv2.VideoWriter('output.avi',fourcc, 24, (int(w),int(h)))
+out = cv2.VideoWriter('output_elon.avi',fourcc, 24, (int(w),int(h)))
 #cap.set(3,500)
 #cap.set(4,500)
 #cap.set(5,30)

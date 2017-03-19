@@ -48,7 +48,7 @@ class teeth_cnn:
 			self.net.blobs['data'].data[...] = mouth
 			out = self.net.forward()
 			#pred = out['pred'].argmax()
-			if(out['pred'][0][1]>0.70):
+			if(out['pred'][0][1]>0.55):
 				return 1,out['pred'],x,y,w,h
 			else:
 				return 0,out['pred'],x,y,w,h

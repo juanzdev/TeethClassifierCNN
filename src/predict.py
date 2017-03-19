@@ -13,15 +13,14 @@ import os
 import shutil
 from util import histogram_equalization
 from teeth_cnn import teeth_cnn
-
+import math
 BULK_PREDICTION = 0 #Set this to 0 to classify individual files
-
 #if bulk prediction is set to 1 the net will predict all images on the configured path
 test_set_folder_path = "../img/original_data/b_labeled"
 #all the files will be moved to a showing teeth or not showing teeth folder on the test_output_result_folder_path path
 test_output_result_folder_path = "../result" 
 #if BULK_PREDICTION = 0 the net will classify only the file specified on individual_test_image
-individual_test_image = "../ana.jpg"
+individual_test_image = "../natali2.jpg"
 #read all test images
 original_data_set = [img for img in glob.glob(test_set_folder_path+"/*jpg")]
 
@@ -36,6 +35,27 @@ if BULK_PREDICTION==0:
 	print(result)
 	print("Prediction probabilities")
 	print(prob)
+	if result is not None:
+	    if(result == 1):
+	    	cv2.rectangle(img, (xf,yf),(wf,hf),(0,255,0),4,0)
+	    	prob_round = prob[0][1]*100
+	    	print prob_round
+	    	cv2.rectangle(img, (xf-2,yf-25),(wf+2,yf),(0,255,0),-1,0)
+	    	cv2.rectangle(img, (xf-2,hf),(int(xf+((wf-xf)/2)),hf+25),(0,255,0),-1,0)
+	    	cv2.putText(img, "Teeth!!",(xf,hf+14),cv2.FONT_HERSHEY_PLAIN,1.2,0,2)
+	    	cv2.putText(img, str(prob_round)+"%",(xf,yf-10),cv2.FONT_HERSHEY_PLAIN,1.2,0,2)
+	    	cv2.imwrite("../img/output_test_img/mouthdetectsingle_face_front_.jpg",img)
+	    	print "SHOWING TEETH!!!"
+	    elif(result==0):
+	    	cv2.rectangle(img, (xf,yf),(wf,hf),(64,64,64),4,0)
+	    	prob_round = prob[0][1]*100
+	    	print prob_round
+	    	cv2.rectangle(img, (xf-2,yf-25),(wf+2,yf),(64,64,64),-1,0)
+	    	cv2.rectangle(img, (xf-2,hf),(int(xf+((wf-xf)/2)),hf+25),(64,64,64),-1,0)
+	    	cv2.putText(img, "Teeth??",(xf,hf+14),cv2.FONT_HERSHEY_PLAIN,1.2,0,2)
+	    	cv2.putText(img, str(prob_round)+"%",(xf,yf-10),cv2.FONT_HERSHEY_PLAIN,1.2,0,2)
+	    	cv2.imwrite("../img/output_test_img/mouthdetectsingle_face_front_.jpg",img)
+
 else:
 	files = glob.glob(test_output_result_folder_path+'/not_showing_teeth/*')
 	for f in files:
