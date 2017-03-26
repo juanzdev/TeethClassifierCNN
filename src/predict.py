@@ -20,7 +20,7 @@ test_set_folder_path = "../img/original_data/b_labeled"
 #all the files will be moved to a showing teeth or not showing teeth folder on the test_output_result_folder_path path
 test_output_result_folder_path = "../result" 
 #if BULK_PREDICTION = 0 the net will classify only the file specified on individual_test_image
-individual_test_image = "../natali2.jpg"
+individual_test_image = "../img/internet_images_test/test3.jpg"
 #read all test images
 original_data_set = [img for img in glob.glob(test_set_folder_path+"/*jpg")]
 

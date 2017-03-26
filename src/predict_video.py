@@ -15,9 +15,9 @@ from teeth_cnn import teeth_cnn
 
 cv2.namedWindow("preview")
 vc = cv2.VideoCapture(0)
-#vc.set(3,500)
-#vc.set(4,500)
-#vc.set(5,30)
+vc.set(3,200)
+vc.set(4,200)
+#vc.set(5,100)
 if vc.isOpened(): # try to get the first frame
     rval, frame = vc.read()
 else:

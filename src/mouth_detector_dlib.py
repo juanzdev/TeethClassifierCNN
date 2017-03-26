@@ -32,8 +32,9 @@ class mouth_detector():
         else:
             img = image
     
+        img = cv2.resize(img, (300, 300), interpolation = cv2.INTER_CUBIC) #experimental
         img = histogram_equalization(img)
-        facedets = self.face_det(img,1) #Histogram of gradients
+        facedets = self.face_det(img,1)
         if len(facedets) > 0:
             facedet_obj= facedets[0]
             #cv2.rectangle(img, (facedet_obj.left(),facedet_obj.top()),(facedet_obj.right(),facedet_obj.bottom()),(0,255,0),4,0)
